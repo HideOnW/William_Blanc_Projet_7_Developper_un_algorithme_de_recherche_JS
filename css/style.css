@@ -8,6 +8,13 @@ body{
     width: 100%;
 }
 
+
+
+
+
+
+/* Header */
+
 header{
     padding: 50px 5%;
     width: 90%;
@@ -24,10 +31,12 @@ header{
     justify-content: center;
     align-items: center;
     font-family: "Anton";
-    font-size: 22px;
+    font-size: 21px;
     letter-spacing: 3px;
     text-align: center;
     line-height: 66px;
+    margin-bottom: 50px;
+    font-weight: 100;
 }
 
 .teaser{
@@ -41,8 +50,36 @@ header{
 
 .divsearch{
     background-color: white;
-    width: 80%;
-    height: 72px;
+    width: 75%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 11px;
+    padding: 10px;
+}
+
+.divsearch button{
+    width: 50px;
+    height: 50px;
+    background-color: black;
+    border-radius: 10px;
+    border:none;
+    background-image: url(../Assets/loupe.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.search{
+    font-size: 16px;
+    margin-left: 40px;
+    border: none;
+    width: 90%;
+    text-decoration: none;
+    color: #7A7A7A;
+}
+
+.search:focus{
+    outline: none;
 }
 
 
@@ -50,6 +87,8 @@ header{
 
 
 
+
+/* Main */
 
 main{
     width: 88%;
