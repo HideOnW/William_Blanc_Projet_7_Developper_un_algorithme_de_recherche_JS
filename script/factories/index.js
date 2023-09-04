@@ -56,9 +56,7 @@ const photoRecette = `../../Assets/PhotoRecettes/${data.image}`
         div2.appendChild(div3)
         })
 
-  
-
-
     return article
 
 }
+

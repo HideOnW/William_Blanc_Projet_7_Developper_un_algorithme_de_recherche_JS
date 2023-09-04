@@ -14,12 +14,37 @@
           <h1> CHERCHER PARMI PLUS DE 1500 RECETTES <br> DU QUOTIDIEN, SIMPLES ET DELICIEUSES </h1>
         </div>
         <div class="divsearch">
-          <input class="search" onchange="searchFiltre()" id="search" type="text" placeholder="Rechercher une recette, un ingredient, ..."/>
+          <input class="search" id="jssearch" type="text" placeholder="Rechercher une recette, un ingredient, ..."/>
           <button></button>
         </div>
+        <div class="inputfilter" id="inputsearch"></div>
       </div>
     </header>
     <main>
+      <section id="filtre">
+        <div class="allFilter">
+          <div class="searchFilter" id="ingredients">
+            <div class="filterRecipe" id="ingFilter">
+              <h4>Ingredient</h4>
+              <img src="./Assets/arrow.png" class="arrowfilter">
+            </div>
+          </div>
+          <div class="searchFilter" id="appareils">
+            <div class="filterRecipe" id="appFilter">
+              <h4>Appareils</h4>
+              <img src="./Assets/arrow.png" class="arrowfilter">
+            </div>
+          </div>
+          <div class="searchFilter" id="ustensils">
+            <div class="filterRecipe" id="ustFilter">
+              <h4>Ustensils</h4>
+              <img src="./Assets/arrow.png" class="arrowfilter">
+            </div>
+          </div>
+        </div>
+        <p id="nbrecette"> 1500 recettes</p>
+
+      </section>
       <section id="recettes">
         
       </section>
