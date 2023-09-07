@@ -46,19 +46,33 @@ function getUstensils(){
 const jssearch = document.querySelector('.search')
 jssearch.addEventListener('input', searchFiltre)
 function searchFiltre(){
+    let results = [recipes]
+    const activedFilter = document.querySelectorAll(".pFilter")
+    console.log(activedFilter)
+    if (activedFilter.length > 0){
+        results = []
+        activedFilter.forEach(filter => {
+            filterRecipe(filter, activedFilter, recipes, results)
+        })
+    } else {
+        results = recipes
+    }
+    
+    console.log(results)
     const inputV = jssearch.value.toLowerCase()
-    const result = recipes.filter((recipe) => recipe.name.toLowerCase().includes(inputV) 
-    || recipe.description.toLowerCase().includes(inputV)
-    || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(inputV))
-    || recipe.appliance.toLowerCase().includes(inputV)
-    || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(inputV))
+    results = results.filter((result) => result.name.toLowerCase().includes(inputV) 
+    || result.description.toLowerCase().includes(inputV)
+    || result.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(inputV))
+    || result.appliance.toLowerCase().includes(inputV)
+    || result.ustensils.some(ustensil => ustensil.toLowerCase().includes(inputV))
     )
     document.getElementById("recettes").textContent = ""
-    displayData(result)
-    if (result.length === 0){
+    displayData(results)
+    if (results.length === 0){
     let error = document.createElement("h1")
     error.innerHTML = "Aucune recettes trouvé"
     document.getElementById("recettes").appendChild(error)
+    document.getElementById("inputsearch").style.display = "none";
     }
 
     if(inputV.length > 2){
@@ -67,50 +81,80 @@ function searchFiltre(){
     } else {
         document.getElementById("inputsearch").style.display = "none";
     }
-    if(inputV.length === 0){
+    if(inputV.length === 0 ){
         document.getElementById("inputsearch").style.display = "none";
     }
 }
+
+
+
+function filterRecipe(filter, activedFilter, recipes, result) {
+    const txtFilter = filter.innerHTML
+    console.log(txtFilter)
+    result = result.filter((recipe) => recipe.name.toLowerCase().includes(txtFilter) 
+    || recipe.description.toLowerCase().includes(txtFilter)
+    || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
+    || recipe.appliance.toLowerCase().includes(txtFilter)
+    || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))
+    )
+    console.log(result)
+    return result
+}
+
 
 function underInput(inputV, recipes){
     const results = []
     listeIngredients.forEach((ingredient) => {
         if(ingredient.toLowerCase().includes(inputV)){
-            results.push(ingredient)
+            let ing = {ingredient:ingredient, type:"ingredient"}
+            results.push(ing)
         }
     })
 
     listeAppareils.forEach((appareil) => {
         if(appareil.toLowerCase().includes(inputV)){
-            results.push(appareil)
+            let app = {appareil:appareil, type:"appareil"}
+            results.push(app)
         }
     })
 
     listeUstensils.forEach((ustensil) => {
         if(ustensil.toLowerCase().includes(inputV)){
-            results.push(ustensil)
+            let ust = {ustensil:ustensil, type:"ustensil"}
+            results.push(ust)
         }
     })
-    console.log(results)
     searchInputDisplay(results)
     
 }
+
+
+
+
 
 
 function searchInputDisplay (results){
     const inputSearch = document.getElementById("inputsearch")
     inputSearch.textContent = ""
     results.forEach((result) => {
+       
         const div = document.createElement("div")
         const p = document.createElement("p")
         div.appendChild(p)
-        p.textContent = result
+        if(result.ingredient){
+            p.textContent = result.ingredient
+        } else if (result.appareil){
+            p.textContent = result.appareil
+        } else if (result.ustensil){
+            p.textContent = result.ustensil
+        } 
         inputSearch.appendChild(div)
         div.addEventListener("click", function(event){
             const clickFilter = event.target.innerText
             document.getElementById("jssearch").value = clickFilter
             document.getElementById("inputsearch").style.display = "none";
             console.log(event)
+            displayFiltre(clickFilter, result.type)
             searchFiltre()
         })
     })
@@ -118,9 +162,41 @@ function searchInputDisplay (results){
 
 
 
-function displayFiltre (){
-    const input = document.getElementById("jssearch");
+function displayFiltre (clickFilter, type){
+    const div = document.createElement("div")
+    div.setAttribute("class", "addedFilter")
+    div.setAttribute("data-type", type)
+    const p = document.createElement("p")
+    p.setAttribute("class", "pFilter")
+    p.setAttribute("data-type", type)
+    div.appendChild(p)
+    p.textContent = clickFilter
+    const img = document.createElement("img")
+    img.setAttribute("src", `./Assets/Cross.png`)
+   
+    div.appendChild(img)
+    if(type === "ingredient"){
+        document.getElementById("ingredients").appendChild(div)
+         img.addEventListener("click", () => {
+        document.getElementById("ingredients").removeChild(div) 
+    })     
+    } else if(type === "appareil"){
+        document.getElementById("appareils").appendChild(div)
+         img.addEventListener("click", () => {
+        document.getElementById("appareils").removeChild(div) 
+    })     
+    } else if(type === "ustensil"){
+        document.getElementById("ustensils").appendChild(div)
+         img.addEventListener("click", () => {
+        document.getElementById("ustensils").removeChild(div) 
+    })     
+    }
 }
+
+// function removefilter(div){
+//     document.getElementById("ingredients").removeChild(div)       
+
+// }
 
 // Affichage recettes
 
