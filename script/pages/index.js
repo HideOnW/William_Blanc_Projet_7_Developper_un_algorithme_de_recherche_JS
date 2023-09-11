@@ -46,17 +46,31 @@ function getUstensils(){
 const jssearch = document.querySelector('.search')
 jssearch.addEventListener('input', searchFiltre)
 function searchFiltre(){
-    let results = [recipes]
+    let results = recipes
     const activedFilter = document.querySelectorAll(".pFilter")
     console.log(activedFilter)
-    if (activedFilter.length > 0){
-        results = []
-        activedFilter.forEach(filter => {
-            filterRecipe(filter, activedFilter, recipes, results)
-        })
-    } else {
-        results = recipes
+    if(activedFilter.length > 0){
+        filterRecipe(results, recipes, activedFilter)
+        console.log(results)
+        // results = ""
+    //     activedFilter.forEach((filter) => {
+    //         console.log("yes")
+    //         filterRecipe(filter, activedFilter, results, recipes)
+    //         console.log(results)
+    //     })
+        
+    // console.log(results)
     }
+    // const activedFilter = document.querySelectorAll(".pFilter")
+    // console.log(activedFilter)
+    // if (activedFilter.length > 0){
+    //     results = []
+    //     activedFilter.forEach(filter => {
+    //         filterRecipe(filter, activedFilter, recipes, results)
+    //     })
+    // } else {
+    //     results = recipes
+    
     
     console.log(results)
     const inputV = jssearch.value.toLowerCase()
@@ -87,19 +101,42 @@ function searchFiltre(){
 }
 
 
-
-function filterRecipe(filter, activedFilter, recipes, result) {
-    const txtFilter = filter.innerHTML
-    console.log(txtFilter)
-    result = result.filter((recipe) => recipe.name.toLowerCase().includes(txtFilter) 
-    || recipe.description.toLowerCase().includes(txtFilter)
-    || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
-    || recipe.appliance.toLowerCase().includes(txtFilter)
-    || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))
-    )
-    console.log(result)
-    return result
+function filterRecipe(results, recipes, activedFilter){
+    results = []
+    console.log(results, recipes, activedFilter)
+    activedFilter.forEach((filter) => {
+        const txtFilter = filter.innerHTML
+        console.log(txtFilter)
+        const resultsFilter = recipes.filter((recipe) => recipe.name.toLowerCase().includes(txtFilter) 
+        || recipe.description.toLowerCase().includes(txtFilter)
+        || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
+        || recipe.appliance.toLowerCase().includes(txtFilter)
+        || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))
+        )
+        resultsFilter.forEach((tcheckfilter) => {
+            if(!results.includes(tcheckfilter)) {   
+                 results.push(tcheckfilter)
+            }
+        })
+        console.log(results)
+    })
+    console.log(results)
+    return results
 }
+
+
+// function filterRecipe(filter, activedFilter, results, recipes) {
+//     const txtFilter = filter.innerHTML
+//     console.log(txtFilter)
+//     results = recipes.filter((recipe) => recipe.name.toLowerCase().includes(txtFilter) 
+//     || recipe.description.toLowerCase().includes(txtFilter)
+//     || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
+//     || recipe.appliance.toLowerCase().includes(txtFilter)
+//     || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))
+//     )
+//     console.log(results)
+//     return results
+// }
 
 
 function underInput(inputV, recipes){
