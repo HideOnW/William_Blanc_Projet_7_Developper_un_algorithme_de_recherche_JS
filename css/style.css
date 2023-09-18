@@ -133,24 +133,65 @@ main{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 30px ;
+    margin-bottom: 30px;
+    max-height: 56px;
 }
 
 .allFilter{
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+    gap: 80px;
+    max-height: 56px;
 }
 
 .searchFilter{
     display: flex;
     flex-direction: column;
-    margin-right: 80px;
+    background-color: white;
+    width: 165px;
+    height: 56px;
+    padding: 0px 17px;
+    border-radius: 11px;
+    overflow: hidden;
+
 }
 
 .arrowfilter{
     width: 15px;
     height: 9px;
+}
+
+.divsearchAll{
+    background-color: white;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 11px;
+    border-bottom: 2px rgba(128, 128, 128, 0.4) solid;
+    z-index: 1;
+}
+
+.divsearchAll button{
+    width: 50px;
+    height: 50px;
+    background-color: white;
+    border-radius: 10px;
+    border:none;
+    background-image: url(../Assets/greyloupe.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+
+.searchAll{
+    font-size: 16px;
+    border: none;
+    width: 90%;
+    text-decoration: none;
+    color: #7A7A7A;
 }
 
 .filterRecipe{
@@ -159,11 +200,7 @@ main{
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    width: 165px;
-    height: 56px;
-    background-color: white;
-    padding: 0px 17px;
-    border-radius: 11px;
+    margin-top: 16px;
 }
 
 .addedFilter{
