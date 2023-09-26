@@ -1,10 +1,15 @@
 async function getRecipes() {
-    return fetch("../../recipes.js").then((reponse) => reponse.json())
+    return fetch("../../recipes.js").then((reponse) => 
+        reponse.json()
+        .then((recipes) => {
+            console.log(recipes)
+        })
+
+    )
 }
 
-let actualRecipes = recipes
-
 const listeIngredients = []
+
 
 function getIngredient() {
     recipes.forEach((recipe) => {
@@ -15,6 +20,7 @@ function getIngredient() {
             }
         })
     })
+    displayUnderInputFiltre(listeIngredients, "ingredient")
 }
 
 
@@ -26,6 +32,8 @@ function getAppareil() {
             listeAppareils.push(recipe.appliance)
         }
     })
+    
+    displayUnderInputFiltre(listeAppareils, "appareil")
 }
 
 
@@ -40,7 +48,29 @@ function getUstensils() {
             }
         })
     })
+    
+    displayUnderInputFiltre(listeUstensils, "ustensil")
 }
+
+function displayUnderInputFiltre(liste,type) {
+    console.log(type)
+    const divIng = document.getElementById("ingFilter")
+    const divApp = document.getElementById("appFilter")
+    const divUst = document.getElementById("ustFilter")
+    liste.forEach((data) => {
+        const p = document.createElement('p')
+        p.textContent = data
+        if(type = "ingredient") {
+            divIng.appendChild(p)
+        } else if (type = "appareil") {
+            divApp.appendChild (p)
+        } else if (type = "ustensil") {
+            divUst.appendChild(p)
+        }
+    })
+}
+    
+
 
 
 // Barre de recherche
@@ -52,36 +82,31 @@ jssearch.addEventListener('input', searchFiltre)
 
 function searchFiltre() {
 
-
-    const activedFilter = document.querySelectorAll(".pFilter")
-    if (activedFilter.length > 0) {
-        filterRecipe(actualRecipes, activedFilter)
-    } else {
-        actualRecipes = recipes
-    }
-
     const inputV = jssearch.value.toLowerCase()
 
-    actualRecipes = actualRecipes.filter((result) => result.name.toLowerCase().includes(inputV)
+    const testRecipes = recipes.filter((result) => result.name.toLowerCase().includes(inputV)
         || result.description.toLowerCase().includes(inputV)
         || result.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(inputV))
         || result.appliance.toLowerCase().includes(inputV)
         || result.ustensils.some(ustensil => ustensil.toLowerCase().includes(inputV))
     )
     document.getElementById("recettes").textContent = ""
-    displayData(actualRecipes)
+
+    displayData(testRecipes)
 
 
-    if (actualRecipes.length === 0) {
+    if (testRecipes.length === 0) {
         let error = document.createElement("h1")
         error.innerHTML = "Aucune recettes trouvé"
         document.getElementById("recettes").appendChild(error)
         document.getElementById("inputsearch").style.display = "none";
     }
-
+    
     if (inputV.length > 2) {
         document.getElementById("inputsearch").style.display = "block";
-        underInput(inputV, recipes)
+        showFilterUnderInput(inputV, recipes)
+
+        
     } else {
         document.getElementById("inputsearch").style.display = "none";
     }
@@ -92,32 +117,27 @@ function searchFiltre() {
 
 
 
-function filterRecipe(actualRecipes, activedFilter) {
-    console.log(activedFilter)
+function filterRecipe(recipesToDisplay) {
 
-    activedFilter.forEach((filter) => {
-        const txtFilter = filter.innerHTML
-        console.log(txtFilter)
-        const resultsFilter = actualRecipes.filter((recipe) => recipe.name.toLowerCase().includes(txtFilter)
+    const allFilters = document.querySelectorAll('.pFilter')
+    let filteredRecipes = [...recipesToDisplay];
+
+    allFilters.forEach((filter) => {
+        const txtFilter = filter.innerHTML.toLowerCase(); 
+        filteredRecipes = filteredRecipes.filter((recipe) => 
+            recipe.name.toLowerCase().includes(txtFilter)
             || recipe.description.toLowerCase().includes(txtFilter)
             || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
             || recipe.appliance.toLowerCase().includes(txtFilter)
             || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))
-        )
-        resultsFilter.forEach((tcheckfilter) => {
-            if (!actualRecipes.includes(tcheckfilter)) {
-                actualRecipes.push(tcheckfilter)
-            }
-        })
-    })
+        );
 
-    
+    });
+    return filteredRecipes
 }
 
 
-
-
-function underInput(inputV, recipes) {
+function showFilterUnderInput(inputV) {
     const results = []
     listeIngredients.forEach((ingredient) => {
         if (ingredient.toLowerCase().includes(inputV)) {
@@ -144,10 +164,6 @@ function underInput(inputV, recipes) {
 }
 
 
-
-
-
-
 function searchInputDisplay(results) {
     const inputSearch = document.getElementById("inputsearch")
     inputSearch.textContent = ""
@@ -169,11 +185,9 @@ function searchInputDisplay(results) {
             document.getElementById("jssearch").value = clickFilter
             document.getElementById("inputsearch").style.display = "none";
             displayFiltre(clickFilter, result.type)
-            searchFiltre()
         })
     })
 }
-
 
 
 function displayFiltre(clickFilter, type) {
@@ -194,36 +208,40 @@ function displayFiltre(clickFilter, type) {
         img.addEventListener("click", () => {
             document.getElementById("ingredients").removeChild(div)
             document.getElementById("jssearch").value = ""
-            searchFiltre()
+            displayData()
         })
     } else if (type === "appareil") {
         document.getElementById("appareils").appendChild(div)
         img.addEventListener("click", () => {
             document.getElementById("appareils").removeChild(div)
             document.getElementById("jssearch").value = ""
-            searchFiltre()  
+            displayData()  
         })
     } else if (type === "ustensil") {
         document.getElementById("ustensils").appendChild(div)
         img.addEventListener("click", () => {
             document.getElementById("ustensils").removeChild(div)
             document.getElementById("jssearch").value = ""
-            searchFiltre()
+            displayData()
         })
     }
 }
 
+// Affichage Data
 
-async function displayData(recipes) {
+async function displayData(recipesToDisplay) {
     const recettesSection = document.getElementById("recettes")
 
-    recipes.forEach((recipes) => {
+    const recipesFiltered =  filterRecipe(recipesToDisplay)
+
+    recipesFiltered.forEach((recipes) => {
         const recetteCardDom = getrecetteCardDom(recipes);
         recettesSection.appendChild(recetteCardDom)
     })
 }
 
 async function init() {
+    getRecipes()
     getIngredient(recipes)
     getAppareil(recipes)
     getUstensils(recipes)
