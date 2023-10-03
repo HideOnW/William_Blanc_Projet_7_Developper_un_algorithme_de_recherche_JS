@@ -8,8 +8,15 @@ async function getRecipes() {
     )
 }
 
-const listeIngredients = []
 
+
+const jssearch = document.querySelector('.search')
+jssearch.addEventListener('input', searchFiltre)
+
+// Liste Spécifique
+
+
+const listeIngredients = []
 
 function getIngredient() {
     recipes.forEach((recipe) => {
@@ -20,6 +27,7 @@ function getIngredient() {
             }
         })
     })
+
     displayUnderInputFiltre(listeIngredients, "ingredient")
 }
 
@@ -32,8 +40,8 @@ function getAppareil() {
             listeAppareils.push(recipe.appliance)
         }
     })
-    
     displayUnderInputFiltre(listeAppareils, "appareil")
+
 }
 
 
@@ -48,40 +56,36 @@ function getUstensils() {
             }
         })
     })
-    
     displayUnderInputFiltre(listeUstensils, "ustensil")
+
 }
 
+
+
+
+// Recherche Barre principale
+
 function displayUnderInputFiltre(liste,type) {
-    console.log(type)
     const divIng = document.getElementById("ingFilter")
     const divApp = document.getElementById("appFilter")
     const divUst = document.getElementById("ustFilter")
     liste.forEach((data) => {
         const p = document.createElement('p')
         p.textContent = data
-        if(type = "ingredient") {
+        if(type === "ingredient") {
             divIng.appendChild(p)
-        } else if (type = "appareil") {
-            divApp.appendChild (p)
-        } else if (type = "ustensil") {
+        } else if (type === "appareil") {
+            divApp.appendChild(p)
+        } else if (type === "ustensil") {
             divUst.appendChild(p)
         }
     })
 }
-    
-
-
-
-// Barre de recherche
-
-const jssearch = document.querySelector('.search')
-jssearch.addEventListener('input', searchFiltre)
 
 
 
 function searchFiltre() {
-
+    console.log("yes")
     const inputV = jssearch.value.toLowerCase()
 
     const testRecipes = recipes.filter((result) => result.name.toLowerCase().includes(inputV)
@@ -92,7 +96,9 @@ function searchFiltre() {
     )
     document.getElementById("recettes").textContent = ""
 
-    displayData(testRecipes)
+    const recipesToDisplay = filterRecipe(testRecipes)
+    
+    displayData(recipesToDisplay)
 
 
     if (testRecipes.length === 0) {
@@ -100,8 +106,8 @@ function searchFiltre() {
         error.innerHTML = "Aucune recettes trouvé"
         document.getElementById("recettes").appendChild(error)
         document.getElementById("inputsearch").style.display = "none";
-    }
-    
+    } 
+
     if (inputV.length > 2) {
         document.getElementById("inputsearch").style.display = "block";
         showFilterUnderInput(inputV, recipes)
@@ -110,9 +116,7 @@ function searchFiltre() {
     } else {
         document.getElementById("inputsearch").style.display = "none";
     }
-    if (inputV.length === 0) {
-        document.getElementById("inputsearch").style.display = "none";
-    }
+
 }
 
 
@@ -135,6 +139,7 @@ function filterRecipe(recipesToDisplay) {
     });
     return filteredRecipes
 }
+
 
 
 function showFilterUnderInput(inputV) {
@@ -165,10 +170,11 @@ function showFilterUnderInput(inputV) {
 
 
 function searchInputDisplay(results) {
+
     const inputSearch = document.getElementById("inputsearch")
     inputSearch.textContent = ""
-    results.forEach((result) => {
 
+    results.forEach((result) => {
         const div = document.createElement("div")
         const p = document.createElement("p")
         div.appendChild(p)
@@ -184,10 +190,12 @@ function searchInputDisplay(results) {
             const clickFilter = event.target.innerText
             document.getElementById("jssearch").value = clickFilter
             document.getElementById("inputsearch").style.display = "none";
+            searchFiltre()
             displayFiltre(clickFilter, result.type)
         })
     })
 }
+
 
 
 function displayFiltre(clickFilter, type) {
@@ -201,35 +209,69 @@ function displayFiltre(clickFilter, type) {
     p.textContent = clickFilter
     const img = document.createElement("img")
     img.setAttribute("src", `./Assets/Cross.png`)
-
     div.appendChild(img)
+
+
     if (type === "ingredient") {
         document.getElementById("ingredients").appendChild(div)
         img.addEventListener("click", () => {
             document.getElementById("ingredients").removeChild(div)
             document.getElementById("jssearch").value = ""
-            displayData()
+            searchFiltre()
         })
     } else if (type === "appareil") {
         document.getElementById("appareils").appendChild(div)
         img.addEventListener("click", () => {
             document.getElementById("appareils").removeChild(div)
             document.getElementById("jssearch").value = ""
-            displayData()  
+            searchFiltre()
         })
     } else if (type === "ustensil") {
         document.getElementById("ustensils").appendChild(div)
         img.addEventListener("click", () => {
             document.getElementById("ustensils").removeChild(div)
             document.getElementById("jssearch").value = ""
-            displayData()
+            searchFiltre()
         })
     }
 }
 
-// Affichage Data
+
+// Recherche spécifique 
+
+const ingInput = document.querySelector('.ingInput')
+const appInput = document.querySelector('.appInput')
+const ustInput = document.querySelector('.ustInput')
+
+ingInput.addEventListener('input', function() {
+    searchInput(ingInput, listeIngredients, "appareil")
+})
+
+
+appInput.addEventListener('input', function() {
+    searchInput(appInput, listeAppareils, "appareil")
+})
+
+ustInput.addEventListener('input', function() {
+    searchInput(ustInput, listeUstensils, "ustensil")
+})
+
+
+function searchInput(input, liste, type) {
+    const inputV = input.value.toLowerCase()
+    console.log(inputV, liste)
+    console.log("test")
+
+    const searchListe = liste.filter((result) => result.toLowerCase().includes(inputV))
+
+    console.log(searchListe)
+    displayUnderInputFiltre(searchListe, type)
+}
+
+//Affichage des données
 
 async function displayData(recipesToDisplay) {
+
     const recettesSection = document.getElementById("recettes")
 
     const recipesFiltered =  filterRecipe(recipesToDisplay)
@@ -241,13 +283,13 @@ async function displayData(recipesToDisplay) {
 }
 
 async function init() {
-    getRecipes()
     getIngredient(recipes)
     getAppareil(recipes)
     getUstensils(recipes)
     displayData(recipes)
-
+    getRecipes()
 }
 
 
 init()
+
