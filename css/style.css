@@ -165,14 +165,14 @@ main{
     overflow: hidden;
     border-radius: 11px;
     background-color: white;
-    height: 324px;
-    max-height: 324px;
-    transition: 1s;
+    max-height: 56px;
+    transition: max-height 0.3s ease-in;
 }
 
 .openInputFiltre:hover{
     height: auto;
-    max-height: 324px;
+    max-height: 326px;
+    padding-bottom: 15px;
 }
 
 .arrowfilter{
@@ -188,7 +188,7 @@ main{
     align-items: center;
     justify-content: space-between;
     border: 2px rgba(128, 128, 128, 0.253) solid;
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
 .divsearchAll button{
@@ -202,8 +202,16 @@ main{
     background-position: center;
 }
 
-.openInputFiltre p{
+.ingredientitemFilter, .appareilitemFilter, .ustensilitemFilter{
     margin: 5px 0px;
+    cursor: pointer;
+}
+
+.ingredienttagFilter, .appareiltagFilter, .ustensiltagFilter{
+    padding: 10px 17px;
+    margin: 0px -17px;
+    margin-bottom: 13px;
+    background-color: #FFD15B;
 }
 
 
