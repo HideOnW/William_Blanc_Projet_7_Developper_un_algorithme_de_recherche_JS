@@ -201,7 +201,7 @@ function displayFiltre(clickFilter, type) {
     p.textContent = clickFilter
     const img = document.createElement("img")
     img.setAttribute("src", `./Assets/Cross.png`)
-    img.className = `${clickFilter}`
+    img.setAttribute("id", `${clickFilter}`)
     div.appendChild(img)
 
 
@@ -222,7 +222,7 @@ function displayFiltre(clickFilter, type) {
     } else if (type === "ustensil") {
         document.getElementById("ustensils").appendChild(div)
         img.addEventListener("click", function(event) {
-            const tagToRemove = event.target.className
+            tagToRemove = event.target.id.value
             console.log(event, tagToRemove)
             document.getElementById("ustensils").removeChild(div)
             document.getElementById("jssearch").value = ""
@@ -248,9 +248,14 @@ function modifOfListe(clickFilter, type, tagModif){
     listeToModify = listeToModify.filter((liste) => liste !== clickFilter)
     displayUnderInputFiltre(listeToModify, type, clickFilter, "activeTag")
     } if (tagModif === "removeTag"){
-        // listeTag = listeTag.filter((liste) => liste !== clickFilter)
-        listetoModify.push(clickFilter)
+        clickFilter = ""
+        const allFilters = document.querySelectorAll('.pFilter')
+        if(allFilters){
+        allFilters.forEach((filtre) => {
+            listeToModify = listeToModify.filter((liste) => liste !== filtre)
+        })
         displayUnderInputFiltre(listeToModify, type, clickFilter, "removeTag")
+        }
     }
 
 }
