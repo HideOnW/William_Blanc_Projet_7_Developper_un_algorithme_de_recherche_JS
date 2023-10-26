@@ -1,12 +1,12 @@
-// async function getRecipes() {
-//     return fetch("../../recipes.js").then((reponse) => 
-//         reponse.json()
-//         .then((recipes) => {
-//             console.log(recipes)
-//         })
+async function getRecipes() {
+    return fetch("../../recipes.js").then((reponse) => 
+        reponse.json()
+        .then((recipes) => {
+            console.log(recipes)
+        })
 
-//     )
-// }
+    )
+}
 
 
 
@@ -18,7 +18,7 @@ jssearch.addEventListener('input', searchFiltre)
 
 const listeIngredients = []
 
-function getIngredient() {
+function getIngredient(recipes, displayType) {
     recipes.forEach((recipe) => {
         recipe.ingredients.forEach((ingredient) => {
             const ing = ingredient.ingredient.toLowerCase()
@@ -34,7 +34,7 @@ function getIngredient() {
 
 const listeAppareils = []
 
-function getAppareil() {
+function getAppareil(recipes) {
     recipes.forEach((recipe) => {
         if (!listeAppareils.includes(recipe.appliance)) {
             listeAppareils.push(recipe.appliance)
@@ -47,7 +47,7 @@ function getAppareil() {
 
 const listeUstensils = []
 
-function getUstensils() {
+function getUstensil(recipes) {
     recipes.forEach((recipe) => {
         recipe.ustensils.forEach((ustensil) => {
             const ust = ustensil.toLocaleLowerCase()
@@ -84,9 +84,13 @@ function searchFiltre() {
 
     if (testRecipes.length === 0) {
         let error = document.createElement("h1")
-        error.innerHTML = "Aucune recettes trouvé"
+        error.innerHTML = "Aucune recette ne contient vous '" + inputV + "' vous pouvez chercher «tarteauxpommes», «poisson», etc."
         document.getElementById("recettes").appendChild(error)
         document.getElementById("inputsearch").style.display = "none";
+        getIngredient(recipes)
+        getAppareil(recipes)
+        getUstensils(recipes)
+        
     } 
 
     if (inputV.length > 2) {
@@ -179,9 +183,9 @@ function searchInputDisplay(results) {
             if(filtreInactif){
             document.getElementById("jssearch").value = clickFilter
             document.getElementById("inputsearch").style.display = "none";
-            searchFiltre()
             displayFiltre(clickFilter, result.type)
             modifOfListe(clickFilter, result.type, "activeTag")
+            searchFiltre()
             }
         })
     })
@@ -194,6 +198,7 @@ function displayFiltre(clickFilter, type) {
     const div = document.createElement("div")
     div.setAttribute("class", "addedFilter")
     div.setAttribute("data-type", type)
+    div.setAttribute("id", `${clickFilter}`)
     const p = document.createElement("p")
     p.setAttribute("class", "pFilter")
     p.setAttribute("data-type", type)
@@ -201,30 +206,38 @@ function displayFiltre(clickFilter, type) {
     p.textContent = clickFilter
     const img = document.createElement("img")
     img.setAttribute("src", `./Assets/Cross.png`)
-    img.setAttribute("id", `${clickFilter}`)
     div.appendChild(img)
 
 
     if (type === "ingredient") {
         document.getElementById("ingredients").appendChild(div)
-        img.addEventListener("click", () => {
-            document.getElementById("ingredients").removeChild(div)
+        img.addEventListener("click", function(event) {
+            div.remove()
+            const tagToRemove = event.target.parentElement.id
+            console.log(event, tagToRemove)
+            document.getElementById(tagToRemove).remove()
             document.getElementById("jssearch").value = ""
+            modifOfListe(tagToRemove, type, "removeTag")
             searchFiltre()
         })
     } else if (type === "appareil") {
         document.getElementById("appareils").appendChild(div)
-        img.addEventListener("click", () => {
-            document.getElementById("appareils").removeChild(div)
+        img.addEventListener("click", function(event) {
+            div.remove()
+            const tagToRemove = event.target.parentElement.id
+            console.log(event, tagToRemove)
+            document.getElementById(tagToRemove).remove()
             document.getElementById("jssearch").value = ""
+            modifOfListe(tagToRemove, type, "removeTag")
             searchFiltre()
         })
     } else if (type === "ustensil") {
         document.getElementById("ustensils").appendChild(div)
         img.addEventListener("click", function(event) {
-            tagToRemove = event.target.id.value
+            div.remove()
+            const tagToRemove = event.target.parentElement.id
             console.log(event, tagToRemove)
-            document.getElementById("ustensils").removeChild(div)
+            document.getElementById(tagToRemove).remove()
             document.getElementById("jssearch").value = ""
             modifOfListe(tagToRemove, type, "removeTag")
             searchFiltre()
@@ -232,10 +245,10 @@ function displayFiltre(clickFilter, type) {
     }
 }
 
-let listetoModify = []
-let listeTag = []
 
 function modifOfListe(clickFilter, type, tagModif){
+    let listeToModify = []
+    let listeTag = []
     if(type === "ingredient") {
         listeToModify = listeIngredients
     } else if (type === "appareil") {
@@ -243,13 +256,19 @@ function modifOfListe(clickFilter, type, tagModif){
     } else if (type === "ustensil") {
         listeToModify = listeUstensils
     }
+    const allFilters = document.querySelectorAll('.pFilter')
     if (tagModif === "activeTag"){
     // listeTag = listetoModify.filter((liste) => liste == clickFilter)
-    listeToModify = listeToModify.filter((liste) => liste !== clickFilter)
+    allFilters.forEach((filter) => {
+        console.log(filter)
+        listeToModify = listeToModify.filter((liste) => liste !== filter.innerText)
+    })
+    console.log(listeToModify)
     displayUnderInputFiltre(listeToModify, type, clickFilter, "activeTag")
-    } if (tagModif === "removeTag"){
+    } 
+    
+    if (tagModif === "removeTag"){
         clickFilter = ""
-        const allFilters = document.querySelectorAll('.pFilter')
         if(allFilters){
         allFilters.forEach((filtre) => {
             listeToModify = listeToModify.filter((liste) => liste !== filtre)
@@ -267,6 +286,8 @@ function displayUnderInputFiltre(liste, type, clickFilter, tagModif) {
     const divIng = document.getElementById("ingFilter")
     const divApp = document.getElementById("appFilter")
     const divUst = document.getElementById("ustFilter")
+    divUst.innerHTML = ""
+    console.log(liste)
     if(clickFilter){
         const ptag = document.createElement('p')
         ptag.classList.add(type + "tagFilter")
@@ -274,10 +295,16 @@ function displayUnderInputFiltre(liste, type, clickFilter, tagModif) {
         ptag.textContent = clickFilter
         if(type === "ingredient" && tagModif === "activeTag") {
             divIng.appendChild(ptag)
+        } else if (type === "ingredient" && tagModif === "removeTag") {
+            const tagToRemove = document.getElementById(`${clickFilter}`)
+            divUst.remove(tagToRemove)
         }
         
         if (type === "appareil" && tagModif === "activeTag") {
             divApp.appendChild(ptag)
+        } else if (type === "appareil" && tagModif === "removeTag") {
+            const tagToRemove = document.getElementById(`${clickFilter}`)
+            divUst.remove(tagToRemove)
         }
         
         if (type === "ustensil" && tagModif === "activeTag") {
@@ -322,9 +349,9 @@ function displayUnderInputFiltre(liste, type, clickFilter, tagModif) {
                 } else if (type === "ustensil") {
                     divUst.appendChild(p)
                 }
+            displayFiltre(clickFilter, type)            
+            modifOfListe(clickFilter, type, "activeTag")
             searchFiltre()
-            displayFiltre(clickFilter, type)
-            modifOfListe(clickFilter, type)
             }
         })
     })
@@ -345,7 +372,7 @@ appInput.addEventListener('input', (e) =>  {
 
 
 ustInput.addEventListener('input', (e) =>  {
-    searchInput(e, ustInput, listeUstensils, "ingredient")
+    searchInput(e, ustInput, listeUstensils, "ustensil")
 })
 
 
@@ -367,11 +394,16 @@ function searchInput(e, input, liste, type) {
 
 //Affichage des données
 
-async function displayData(recipesToDisplay) {
+async function displayData(recipesToDisplay, displayType) {
 
     const recettesSection = document.getElementById("recettes")
 
     const recipesFiltered =  filterRecipe(recipesToDisplay)
+
+    
+    getIngredient(recipesFiltered, displayType)
+    getAppareil(recipesFiltered, displayType)
+    getUstensil(recipesFiltered, displayType)
 
     recipesFiltered.forEach((recipes) => {
         const recetteCardDom = getrecetteCardDom(recipes);
@@ -380,10 +412,7 @@ async function displayData(recipesToDisplay) {
 }
 
 async function init() {
-    getIngredient(recipes)
-    getAppareil(recipes)
-    getUstensils(recipes)
-    displayData(recipes)
+    displayData(recipes, "init")
     // getRecipes()
 }
 
