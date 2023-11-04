@@ -38,6 +38,15 @@ function getIngredient(recipes, displayType) {
         })
     }
 
+    const allFilters = document.querySelectorAll('.pFilter')
+
+    if(allFilters){
+        allFilters.forEach((filtre) => {
+            console.log("yes")
+            listeIngredients = listeIngredients.filter((liste) => liste !== filtre.innerHTML)
+        })
+    }
+
     displayUnderInputFiltre(listeIngredients, "ingredient")
 }
 
@@ -65,6 +74,7 @@ function getAppareil(recipes) {
 
     
     displayUnderInputFiltre(listeAppareils, "appareil")
+
 
 }
 
