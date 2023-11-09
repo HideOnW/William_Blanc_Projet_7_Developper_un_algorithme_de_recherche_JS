@@ -30,7 +30,6 @@ function getIngredient(recipes, displayType) {
     })
 
     const allFilters = document.querySelectorAll('.pFilter')
-    console.log(allFilters)
 
     if(allFilters){
         allFilters.forEach((filtre) => {
@@ -53,15 +52,12 @@ function getAppareil(recipes) {
     })
 
     const allFilters = document.querySelectorAll('.pFilter')
-    console.log(allFilters)
 
     if(allFilters){
         allFilters.forEach((filtre) => {
             listeAppareils = listeAppareils.filter((liste) => liste !== filtre.innerHTML)
         })
     }
-
-    console.log(listeAppareils)
 
     
     displayUnderInputFiltre(listeAppareils, "appareil")
@@ -84,7 +80,6 @@ function getUstensil(recipes) {
     })
 
     const allFilters = document.querySelectorAll('.pFilter')
-    console.log(allFilters)
 
     if(allFilters){
         allFilters.forEach((filtre) => {
@@ -106,12 +101,30 @@ function getUstensil(recipes) {
 function searchFiltre() {
     const inputV = jssearch.value.toLowerCase()
 
-    const testRecipes = recipes.filter((result) => result.name.toLowerCase().includes(inputV)
-        || result.description.toLowerCase().includes(inputV)
-        || result.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(inputV))
-        || result.appliance.toLowerCase().includes(inputV)
-        || result.ustensils.some(ustensil => ustensil.toLowerCase().includes(inputV))
-    )
+    
+    const testRecipes = []
+
+    for (const n of recipes) {
+        if(n.name.toLowerCase().includes(inputV)
+        || n.description.toLowerCase().includes(inputV) 
+        || n.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(inputV))
+        || n.appliance.toLowerCase().includes(inputV)
+        || n.ustensils.some(ustensil => ustensil.toLowerCase().includes(inputV))){            
+            testRecipes.push(n)
+        }
+    }
+
+    console.log(testRecipes)
+
+
+
+
+    // const testRecipes = recipes.filter((result) => result.name.toLowerCase().includes(inputV)
+    //     || result.description.toLowerCase().includes(inputV)
+    //     || result.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(inputV))
+    //     || result.appliance.toLowerCase().includes(inputV)
+    //     || result.ustensils.some(ustensil => ustensil.toLowerCase().includes(inputV))
+    // )
     document.getElementById("recettes").textContent = ""
 
     const recipesToDisplay = filterRecipe(testRecipes)
@@ -129,7 +142,7 @@ function searchFiltre() {
         document.getElementById("inputsearch").style.display = "none";
         getIngredient(recipes)
         getAppareil(recipes)
-        getUstensils(recipes)
+        getUstensil(recipes)
         
     } 
 
@@ -150,15 +163,27 @@ function filterRecipe(recipesToDisplay) {
     const allFilters = document.querySelectorAll('.pFilter')
     let filteredRecipes = [...recipesToDisplay];
 
+
+
     allFilters.forEach((filter) => {
         const txtFilter = filter.innerHTML.toLowerCase(); 
-        filteredRecipes = filteredRecipes.filter((recipe) => 
-            recipe.name.toLowerCase().includes(txtFilter)
-            || recipe.description.toLowerCase().includes(txtFilter)
-            || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
-            || recipe.appliance.toLowerCase().includes(txtFilter)
-            || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))
-        );
+
+        for (const n of filteredRecipes) {
+            if(n.name.toLowerCase().includes(txtFilter)
+            || n.description.toLowerCase().includes(txtFilter) 
+            || n.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
+            || n.appliance.toLowerCase().includes(txtFilter)
+            || n.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))){            
+                filteredRecipes.push(n)
+            }
+        }
+        // filteredRecipes = filteredRecipes.filter((recipe) => 
+        //     recipe.name.toLowerCase().includes(txtFilter)
+        //     || recipe.description.toLowerCase().includes(txtFilter)
+        //     || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
+        //     || recipe.appliance.toLowerCase().includes(txtFilter)
+        //     || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))
+        // );
     });
     return filteredRecipes
 }
@@ -167,7 +192,6 @@ function filterRecipe(recipesToDisplay) {
 function showFilterUnderInput(inputV) {
     const results = []
     const tagActive = document.querySelectorAll('.pFilter')
-    console.log(tagActive)
     listeIngredients.forEach((ingredient) => {
         if (ingredient.toLowerCase().includes(inputV) || !ingredient.toLowerCase()) {
             let ing = { ingredient: ingredient, type: "ingredient" }
@@ -237,7 +261,6 @@ function displayFiltre(clickFilter, type) {
     const div = document.createElement("div")
     div.setAttribute("class", "addedFilter")
     div.setAttribute("data-type", type)
-    // div.setAttribute("id", `${clickFilter}`)
     const p = document.createElement("p")
     p.setAttribute("class", "pFilter")
     p.setAttribute("data-type", type)
@@ -249,7 +272,6 @@ function displayFiltre(clickFilter, type) {
 
     const ptag = document.createElement("p")
     ptag.classList.add(type + "tagFilter")
-    // ptag.setAttribute("id", `${clickFilter}`)
     ptag.textContent = clickFilter
 
     if (type === "ingredient") {
@@ -285,41 +307,6 @@ function displayFiltre(clickFilter, type) {
 }
 
 
-// function modifOfListe(clickFilter, type, tagModif){
-//     let listeToModify = []
-//     let listeTag = []
-//     if(type === "ingredient") {
-//         listeToModify = listeIngredients
-//     } else if (type === "appareil") {
-//         listeToModify = listeAppareils
-//     } else if (type === "ustensil") {
-//         listeToModify = listeUstensils
-//     }
-
-//     const allFilters = document.querySelectorAll('.pFilter')
-//     if (tagModif === "activeTag"){
-//     // listeTag = listetoModify.filter((liste) => liste == clickFilter)
-//     allFilters.forEach((filter) => {
-//         console.log(filter)
-//         listeToModify = listeToModify.filter((liste) => liste !== filter.innerText)
-//     })
-//     console.log(listeToModify)
-//     displayUnderInputFiltre(listeToModify, type, clickFilter, "activeTag")
-//     } 
-    
-//     if (tagModif === "removeTag"){
-//         clickFilter = ""
-//         if(allFilters){
-//         allFilters.forEach((filtre) => {
-//             listeToModify = listeToModify.filter((liste) => liste !== filtre)
-//         })
-//         displayUnderInputFiltre(listeToModify, type, clickFilter, "removeTag")
-//         }
-//     }
-
-// }
-
-
 // Recherche spécifique 
 
 function displayUnderInputFiltre(liste, type, clickFilter, tagModif) {
@@ -332,14 +319,6 @@ function displayUnderInputFiltre(liste, type, clickFilter, tagModif) {
     itemToDelete.forEach((item) => {
         item.remove()
     })
-    // if(type === "ingredient") {
-    //     divIng.innerHTML = ""
-    // } else if (type === "appareil") {
-    //     divApp.innerHTML = ""
-    // } else if (type === "ustensil") {
-    //     divUst.innerHTML = ""
-    // }
-    console.log(liste)
     liste.forEach((data) => {
         const p = document.createElement('p')
         p.classList.add(type + "itemFilter")
@@ -370,8 +349,7 @@ function displayUnderInputFiltre(liste, type, clickFilter, tagModif) {
                 } else if (type === "ustensil") {
                     divUst.appendChild(p)
                 }
-            displayFiltre(clickFilter, type)            
-            // modifOfListe(clickFilter, type, "activeTag")
+            displayFiltre(clickFilter, type)
             searchFiltre()
             }
         })
