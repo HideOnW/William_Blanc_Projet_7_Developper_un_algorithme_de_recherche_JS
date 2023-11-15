@@ -114,25 +114,19 @@ function searchFiltre() {
         }
     }
 
-    console.log(testRecipes)
-
-
-
-
-    // const testRecipes = recipes.filter((result) => result.name.toLowerCase().includes(inputV)
-    //     || result.description.toLowerCase().includes(inputV)
-    //     || result.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(inputV))
-    //     || result.appliance.toLowerCase().includes(inputV)
-    //     || result.ustensils.some(ustensil => ustensil.toLowerCase().includes(inputV))
-    // )
     document.getElementById("recettes").textContent = ""
 
     const recipesToDisplay = filterRecipe(testRecipes)
 
+    console.log(recipesToDisplay)
+
+    
     const nbRecette = document.getElementById("nbrecette")
     nbRecette.textContent = recipesToDisplay.length + " recettes"
     
     displayData(recipesToDisplay)
+
+
 
 
     if (testRecipes.length === 0) {
@@ -162,30 +156,49 @@ function filterRecipe(recipesToDisplay) {
 
     const allFilters = document.querySelectorAll('.pFilter')
     let filteredRecipes = [...recipesToDisplay];
+    let newarray = []
+
+    console.log("test", allFilters)
 
 
 
+    if(allFilters.length != 0){
     allFilters.forEach((filter) => {
         const txtFilter = filter.innerHTML.toLowerCase(); 
 
-        for (const n of filteredRecipes) {
-            if(n.name.toLowerCase().includes(txtFilter)
-            || n.description.toLowerCase().includes(txtFilter) 
-            || n.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
-            || n.appliance.toLowerCase().includes(txtFilter)
-            || n.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))){            
-                filteredRecipes.push(n)
-            }
+        if(newarray.length === 0){       
+
+        for(let i = 0; i < filteredRecipes.length; i++ ){
+            if(filteredRecipes[i].name.toLowerCase().includes(txtFilter)
+            || filteredRecipes[i].description.toLowerCase().includes(txtFilter) 
+            || filteredRecipes[i].ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
+            || filteredRecipes[i].appliance.toLowerCase().includes(txtFilter)
+            || filteredRecipes[i].ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))){
+                newarray.push(filteredRecipes[i])
         }
-        // filteredRecipes = filteredRecipes.filter((recipe) => 
-        //     recipe.name.toLowerCase().includes(txtFilter)
-        //     || recipe.description.toLowerCase().includes(txtFilter)
-        //     || recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
-        //     || recipe.appliance.toLowerCase().includes(txtFilter)
-        //     || recipe.ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))
-        // );
-    });
+    }} else {
+
+        filteredRecipes = newarray
+        newarray =[]
+
+        for(let i = 0; i < filteredRecipes.length; i++ ){
+            if(filteredRecipes[i].name.toLowerCase().includes(txtFilter)
+            || filteredRecipes[i].description.toLowerCase().includes(txtFilter) 
+            || filteredRecipes[i].ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(txtFilter))
+            || filteredRecipes[i].appliance.toLowerCase().includes(txtFilter)
+            || filteredRecipes[i].ustensils.some(ustensil => ustensil.toLowerCase().includes(txtFilter))){
+                newarray.push(filteredRecipes[i])}
+    }
+    }});
+
+    if (newarray.length === 0){
+        return filteredRecipes
+    } else {
+        return newarray
+    }
+} else {
     return filteredRecipes
+}
 }
 
 
