@@ -30,7 +30,6 @@ function getIngredient(recipes, displayType) {
     })
 
     const allFilters = document.querySelectorAll('.pFilter')
-    console.log(allFilters)
 
     if(allFilters){
         allFilters.forEach((filtre) => {
@@ -53,7 +52,6 @@ function getAppareil(recipes) {
     })
 
     const allFilters = document.querySelectorAll('.pFilter')
-    console.log(allFilters)
 
     if(allFilters){
         allFilters.forEach((filtre) => {
@@ -61,7 +59,6 @@ function getAppareil(recipes) {
         })
     }
 
-    console.log(listeAppareils)
 
     
     displayUnderInputFiltre(listeAppareils, "appareil")
@@ -84,7 +81,6 @@ function getUstensil(recipes) {
     })
 
     const allFilters = document.querySelectorAll('.pFilter')
-    console.log(allFilters)
 
     if(allFilters){
         allFilters.forEach((filtre) => {
@@ -124,7 +120,7 @@ function searchFiltre() {
 
     if (testRecipes.length === 0) {
         let error = document.createElement("h1")
-        error.innerHTML = "Aucune recette ne contient vous '" + inputV + "' vous pouvez chercher «tarteauxpommes», «poisson», etc."
+        error.innerHTML = "Aucune recette ne contient vous '" + inputV + "' vous pouvez chercher «tarte aux pommes», «poisson», etc."
         document.getElementById("recettes").appendChild(error)
         document.getElementById("inputsearch").style.display = "none";
         getIngredient(recipes)
@@ -237,7 +233,6 @@ function displayFiltre(clickFilter, type) {
     const div = document.createElement("div")
     div.setAttribute("class", "addedFilter")
     div.setAttribute("data-type", type)
-    // div.setAttribute("id", `${clickFilter}`)
     const p = document.createElement("p")
     p.setAttribute("class", "pFilter")
     p.setAttribute("data-type", type)
@@ -247,77 +242,78 @@ function displayFiltre(clickFilter, type) {
     img.setAttribute("src", `./Assets/Cross.png`)
     div.appendChild(img)
 
+
+    const div2 = document.createElement("div")
+    const img2 = document.createElement("img")
+    img2.setAttribute("src", `./Assets/Cross.png`)
     const ptag = document.createElement("p")
-    ptag.classList.add(type + "tagFilter")
-    // ptag.setAttribute("id", `${clickFilter}`)
+    div2.setAttribute("class", "addedFilter2")
+    div2.classList.add(type + "tagFilter")
     ptag.textContent = clickFilter
+    div2.appendChild(ptag)
+    div2.appendChild(img2)
 
     if (type === "ingredient") {
         document.getElementById("ingredients").appendChild(div)
-        document.getElementById("ingFilter").appendChild(ptag)
+        document.getElementById("ingFilter").appendChild(div2)
 
         img.addEventListener("click", function(event) {
             div.remove()
-            ptag.remove()
+            div2.remove()
+            document.getElementById("jssearch").value = ""
+            searchFiltre()
+        })
+        img2.addEventListener("click", function(event) {
+            div.remove()
+            div2.remove()
             document.getElementById("jssearch").value = ""
             searchFiltre()
         })
     } else if (type === "appareil") {
         document.getElementById("appareils").appendChild(div)
-        document.getElementById("appFilter").appendChild(ptag)
+        document.getElementById("appFilter").appendChild(div2)
         img.addEventListener("click", function(event) {
             div.remove()
-            ptag.remove()
+            div2.remove()
+            document.getElementById("jssearch").value = ""
+            searchFiltre()
+        })
+        img2.addEventListener("click", function(event) {
+            div.remove()
+            div2.remove()
             document.getElementById("jssearch").value = ""
             searchFiltre()
         })
     } else if (type === "ustensil") {
         document.getElementById("ustensils").appendChild(div)
-        document.getElementById("ustFilter").appendChild(ptag)
+        document.getElementById("ustFilter").appendChild(div2)
 
         img.addEventListener("click", function(event) {
             div.remove()
-            ptag.remove()
+            div2.remove()
+            document.getElementById("jssearch").value = ""
+            searchFiltre()
+        })
+        img2.addEventListener("click", function(event) {
+            div.remove()
+            div2.remove()
             document.getElementById("jssearch").value = ""
             searchFiltre()
         })
     }
 }
 
+const imgLoupe = document.getElementById("imgloupe")
+imgLoupe.setAttribute("src", "/Assets/loupe.png")
 
-// function modifOfListe(clickFilter, type, tagModif){
-//     let listeToModify = []
-//     let listeTag = []
-//     if(type === "ingredient") {
-//         listeToModify = listeIngredients
-//     } else if (type === "appareil") {
-//         listeToModify = listeAppareils
-//     } else if (type === "ustensil") {
-//         listeToModify = listeUstensils
-//     }
 
-//     const allFilters = document.querySelectorAll('.pFilter')
-//     if (tagModif === "activeTag"){
-//     // listeTag = listetoModify.filter((liste) => liste == clickFilter)
-//     allFilters.forEach((filter) => {
-//         console.log(filter)
-//         listeToModify = listeToModify.filter((liste) => liste !== filter.innerText)
-//     })
-//     console.log(listeToModify)
-//     displayUnderInputFiltre(listeToModify, type, clickFilter, "activeTag")
-//     } 
-    
-//     if (tagModif === "removeTag"){
-//         clickFilter = ""
-//         if(allFilters){
-//         allFilters.forEach((filtre) => {
-//             listeToModify = listeToModify.filter((liste) => liste !== filtre)
-//         })
-//         displayUnderInputFiltre(listeToModify, type, clickFilter, "removeTag")
-//         }
-//     }
+document.getElementById("btnloupe").addEventListener("mouseover", (event) => {
+    imgLoupe.setAttribute("src", "/Assets/loupen.png")
+}, false)
+document.getElementById("btnloupe").addEventListener("mouseout", (event) => {
+    imgLoupe.setAttribute("src", "/Assets/loupe.png")
+}, false)
 
-// }
 
 
 // Recherche spécifique 
@@ -332,14 +328,6 @@ function displayUnderInputFiltre(liste, type, clickFilter, tagModif) {
     itemToDelete.forEach((item) => {
         item.remove()
     })
-    // if(type === "ingredient") {
-    //     divIng.innerHTML = ""
-    // } else if (type === "appareil") {
-    //     divApp.innerHTML = ""
-    // } else if (type === "ustensil") {
-    //     divUst.innerHTML = ""
-    // }
-    console.log(liste)
     liste.forEach((data) => {
         const p = document.createElement('p')
         p.classList.add(type + "itemFilter")

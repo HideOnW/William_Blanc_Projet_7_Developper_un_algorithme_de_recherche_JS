@@ -87,10 +87,20 @@ header{
     background-color: black;
     border-radius: 10px;
     border:none;
-    background-image: url(../Assets/loupe.png);
+    /* background-image: url(../Assets/loupe.png);
     background-repeat: no-repeat;
-    background-position: center;
+    background-position: center; */
 }
+
+.divsearch button img{
+    filter: opacity(1) drop-shadow(0 0 0 rgb(0, 0, 0));     
+}
+ 
+
+.divsearch button:hover{
+    background-color: #FFD15B;
+}
+
 
 .search{
     font-size: 16px;
@@ -252,12 +262,24 @@ main{
     z-index: 0;
 }
 
+.addedFilter2{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
 
 .addedFilter img{
     cursor: pointer;
 }
 
+#nbrecette{
+    font-size: 21px;
+    font-weight: 900;
+    font-family: "Anton";
 
+}
 
 
 
