@@ -304,14 +304,14 @@ function displayFiltre(clickFilter, type) {
 }
 
 const imgLoupe = document.getElementById("imgloupe")
-imgLoupe.setAttribute("src", "/Assets/loupe.png")
+imgLoupe.setAttribute("src", "./Assets/loupe.png")
 
 
 document.getElementById("btnloupe").addEventListener("mouseover", (event) => {
-    imgLoupe.setAttribute("src", "/Assets/loupen.png")
+    imgLoupe.setAttribute("src", "./Assets/loupen.png")
 }, false)
 document.getElementById("btnloupe").addEventListener("mouseout", (event) => {
-    imgLoupe.setAttribute("src", "/Assets/loupe.png")
+    imgLoupe.setAttribute("src", "./Assets/loupe.png")
 }, false)
 
 
