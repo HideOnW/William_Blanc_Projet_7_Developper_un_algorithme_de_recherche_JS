@@ -2,7 +2,7 @@
 
 function getrecetteCardDom(data) {
 
-const photoRecette = `../../Assets/PhotoRecettes/${data.image}`
+const photoRecette = `Assets/PhotoRecettes/${data.image}`
 
     const article = document.createElement("article");
 
